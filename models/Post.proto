@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package post;
+
+message Comment {
+  string body = 1;
+  string username = 2;
+  string createdAt = 3;
+}
+
+message Like {
+  string username = 1;
+  string createdAt = 2;
+}
+
+message Post {
+  string body = 1;
+  string username = 2;
+  string createdAt = 3;
+  repeated Comment comments = 4;
+  repeated Like likes = 5;
+  string user = 6;
+}
+
+message CreatePostRequest {
+  string body = 1;
+}
+
+message CreatePostResponse {
+  Post post = 1;
+}
+
+message DeletePostRequest {
+  string postId = 1;
+}
+
+message DeletePostResponse {
+  string message = 1;
+}
+
+service PostService {
+  rpc CreatePost(CreatePostRequest) returns (CreatePostResponse);
+  rpc DeletePost(DeletePostRequest) returns (DeletePostResponse);
+  // Add more RPC methods as needed
+}
