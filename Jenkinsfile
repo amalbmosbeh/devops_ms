@@ -1,26 +1,46 @@
 pipeline {
     agent any
+
+    environment {
+        // Ajouter la variable dh_cred comme variables d'authentification
+        DOCKERHUB_CREDENTIALS = credentials('dh_cred')
+    }
+
     triggers {
         pollSCM('*/5 * * * *') // Vérifier toutes les 5 minutes
     }
+
     stages {
         stage('Checkout') {
+            agent any
             steps {
-                echo "Récupération du code source"
                 checkout scm
             }
         }
-        stage('Build') {
-            steps {
-                echo "Build du projet"
 
-                // Ajoutez les commandes de build ici
+        stage('Init') {
+            steps {
+                // Permet l'authentification
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
-        stage('Deploy') {
+
+        stage('Build') {
             steps {
-                echo "Déploiement du projet"
-                // Ajoutez les commandes de déploiement ici
+                sh 'docker build -t $DOCKERHUB_CREDENTIALS_USR/express-sqlite-app:$BUILD_ID .'
+            }
+        }
+
+        stage('Deliver') {
+            steps {
+                sh 'docker push $DOCKERHUB_CREDENTIALS_USR/express-sqlite-app:$BUILD_ID'
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                sh 'docker rmi $DOCKERHUB_CREDENTIALS_USR/express-sqlite-app:$BUILD_ID'
+                sh 'docker logout'
             }
         }
     }
