@@ -31,6 +31,16 @@ pipeline {
         }
     }
 }
+stages {
+        stage('Configure Docker') {
+            steps {
+                script {
+                    // Configure Docker
+                    def dockerHome = tool 'Docker'
+                    env.PATH = "${dockerHome}/bin:${env.PATH}"
+                }
+            }
+        }}
 
 
         stage('Build') {
