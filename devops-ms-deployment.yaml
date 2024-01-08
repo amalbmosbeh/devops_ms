@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devops_ms
+  name: devops-ms-app
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: devops_ms
+      app: devops-ms-app
   template:
     metadata:
       labels:
-        app: devops_ms
+        app: devops-ms-app
     spec:
       dnsPolicy: Default
       containers:
-      - name: devops_ms
-        image: amal26/devops_ms:latest
+      - name: devops-ms-app
+        image: amal26/devops-ms-app:latest
         ports:
         - containerPort: 3006

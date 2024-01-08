@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: devops_ms-lb-service
+  name: devops-ms-app-lb-service
 spec:
   selector:
-    app: devops_ms
+    app: devops-ms-app
   type: LoadBalancer
   ports:
     - port: 80
