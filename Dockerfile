@@ -1,13 +1,7 @@
-FROM node:latest as build
+FROM node:lts-alpine
 WORKDIR /usr/src/app
-
-
-COPY package.json /app/
+COPY package*.json ./
+COPY index.js ./
 RUN npm install
-
-COPY . /app/
-RUN npm run build --prod
-
-
-FROM nginx:latest
-COPY --from=build /app/dist/devops_ms /usr/share/nginx/html
+EXPOSE 3000
+CMD ["node", "index.js"]
