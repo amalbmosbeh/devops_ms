@@ -21,17 +21,17 @@ pipeline {
         stage('Init') {
             steps {
                 script {
-                     def registryCredentials = docker.registryCredentials('dh_credentials')
-            
-            // Créez un fichier de configuration Docker avec les informations d'authentification
-            sh "echo '{\"auths\":{\"${registryCredentials.url}\":{\"username\":\"${registryCredentials.username}\",\"password\":\"${registryCredentials.password}\",\"email\":\"${registryCredentials.email}\",\"auth\":\"${registryCredentials.token}\"}}}' > ~/.docker/config.json"
-            
-            // Assurez-vous que le fichier de configuration a les bonnes autorisations
-            sh 'chmod 0600 ~/.docker/config.json'
+                    def registryCredentials = docker.registryCredentials('dh_credentials')
+
+                    // Créez un fichier de configuration Docker avec les informations d'authentification
+                    sh "echo '{\"auths\":{\"${registryCredentials.url}\":{\"username\":\"${registryCredentials.username}\",\"password\":\"${registryCredentials.password}\",\"email\":\"${registryCredentials.email}\",\"auth\":\"${registryCredentials.token}\"}}}' > ~/.docker/config.json"
+
+                    // Assurez-vous que le fichier de configuration a les bonnes autorisations
+                    sh 'chmod 0600 ~/.docker/config.json'
+                }
+            }
         }
-    }
-}
-stages {
+
         stage('Configure Docker') {
             steps {
                 script {
@@ -40,8 +40,7 @@ stages {
                     env.PATH = "${dockerHome}/bin:${env.PATH}"
                 }
             }
-        }}
-
+        }
 
         stage('Build') {
             steps {
