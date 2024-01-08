@@ -21,12 +21,13 @@ pipeline {
         stage('Init') {
             steps {
                 script {
-                    def registryCredentials = docker.registryCredentials('dh_credentials')
+                    // Utiliser le même nom pour les informations d'authentification
+                    def registryCredentials = docker.registryCredentials('dh_creden')
 
-                    // Créez un fichier de configuration Docker avec les informations d'authentification
+                    // Créer un fichier de configuration Docker avec les informations d'authentification
                     sh "echo '{\"auths\":{\"${registryCredentials.url}\":{\"username\":\"${registryCredentials.username}\",\"password\":\"${registryCredentials.password}\",\"email\":\"${registryCredentials.email}\",\"auth\":\"${registryCredentials.token}\"}}}' > ~/.docker/config.json"
 
-                    // Assurez-vous que le fichier de configuration a les bonnes autorisations
+                    // Assurer que le fichier de configuration a les bonnes autorisations
                     sh 'chmod 0600 ~/.docker/config.json'
                 }
             }
@@ -35,7 +36,7 @@ pipeline {
         stage('Configure Docker') {
             steps {
                 script {
-                    // Configure Docker
+                    // Configurer Docker
                     def dockerHome = tool 'Docker'
                     env.PATH = "${dockerHome}/bin:${env.PATH}"
                 }
