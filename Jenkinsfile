@@ -20,10 +20,18 @@ pipeline {
 
         stage('Init') {
             steps {
-                // Permet l'authentification
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-            }
+                script {
+                     def registryCredentials = docker.registryCredentials('dh_credentials')
+            
+            // Créez un fichier de configuration Docker avec les informations d'authentification
+            sh "echo '{\"auths\":{\"${registryCredentials.url}\":{\"username\":\"${registryCredentials.username}\",\"password\":\"${registryCredentials.password}\",\"email\":\"${registryCredentials.email}\",\"auth\":\"${registryCredentials.token}\"}}}' > ~/.docker/config.json"
+            
+            // Assurez-vous que le fichier de configuration a les bonnes autorisations
+            sh 'chmod 0600 ~/.docker/config.json'
         }
+    }
+}
+
 
         stage('Build') {
             steps {
