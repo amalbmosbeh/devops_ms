@@ -25,6 +25,6 @@ spec:
     spec:
       containers:
       - name: application
-        image: amal26/np:9
+        image: amal26/np:latest
         ports:
         - containerPort: 80
