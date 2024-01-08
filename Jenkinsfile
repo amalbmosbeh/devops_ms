@@ -36,7 +36,9 @@ pipeline {
         stage('Configure Docker') {
             steps {
                 script {
-                    // Configurer Docker
+                    // Ajoutez cette étape pour configurer Docker
+                    wrap([$class: 'DockerConfiguration']) {
+                    // Configure Docker
                     def dockerHome = tool 'Docker'
                     env.PATH = "${dockerHome}/bin:${env.PATH}"
                 }
