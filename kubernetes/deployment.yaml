@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: new-app
+  labels:
+    app: new-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: new-app
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: new-app
+        annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9101"
+
+    spec:
+      containers:
+      - name: application
+        image: amal26/np:9
+        ports:
+        - containerPort: 80
